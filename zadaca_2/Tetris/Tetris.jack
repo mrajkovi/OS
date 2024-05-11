@@ -1,0 +1,173 @@
+class Tetris {
+    static int x1, y1, x2, y2, x3, y3, x4, y4, step;
+
+    function bool isAllowed(int xx1, int yy1, int xx2, int yy2, int xx3, int yy3, int xx4, int yy4) {
+      return (((xx1 > -1) & (xx1 < 513) & (yy1 > -1) & (yy1 < 257)) &
+             ((xx2 > -1) & (xx2 < 513) & (yy2 > -1) & (yy2 < 257)) &
+             ((xx3 > -1) & (xx3 < 513) & (yy3 > -1) & (yy3 < 257)) & 
+             ((xx4 > -1) & (xx4 < 513) & (yy4 > -1) & (yy4 < 257)));
+    }
+    
+    function void draw(bool color) {
+      do Screen.setColor(color);
+      if (x1 < x2) {
+        if (y1 < y2) {
+          do Screen.drawRectangle(x1, y1, x2, y2);
+        } else {
+          do Screen.drawRectangle(x1, y2, x2, y1);
+        }
+      } else {
+        if (y2 < y1) {
+          do Screen.drawRectangle(x2, y2, x1, y1);
+        } else {
+          do Screen.drawRectangle(x2, y1, x1, y2);
+        }
+      }
+
+      if (x3 < x4) {
+        if (y3 < y4) {
+          do Screen.drawRectangle(x3, y3, x4, y4);
+        } else {
+          do Screen.drawRectangle(x3, y4, x4, y3);
+        }
+      } else {
+        if (y4 < y3) {
+          do Screen.drawRectangle(x4, y4, x3, y3);
+        } else {
+          do Screen.drawRectangle(x4, y3, x3, y4);
+        }
+      }
+      return;
+    }
+
+    function void init() {
+      let x1 = 230;
+      let y1 = 120;
+      let x2 = 310;
+      let y2 = 140;
+      let x3 = 290;
+      let y3 = 90;
+      let x4 = 310;
+      let y4 = 140;
+      let step = 10;
+      do Tetris.draw(true);
+      return;
+    }
+
+    function void run() {
+      var int input, newX1, newY1, newX2, newY2, newX3, newY3, newX4, newY4, centerX, centerY;
+      var bool check;
+
+      do Tetris.init();
+      
+      while (true) {
+        let input = Keyboard.readChar();
+
+        if (input = 140) {
+          return;
+        }
+
+        if (input = 130) {
+          let check = Tetris.isAllowed(x1 - step, y1, x2 - step, y2, x3 - step, y3, x4 - step, y4);
+          if (check) {
+            do Tetris.draw(false);
+            let x1 = x1 - step;
+            let x2 = x2 - step;
+            let x3 = x3 - step;
+            let x4 = x4 - step;
+            do Tetris.draw(true);
+          }
+        }
+
+        if (input = 131) {
+          let check = Tetris.isAllowed(x1, y1 - step, x2, y2 - step, x3, y3 - step, x4, y4 - step);
+          if (check) {
+            do Tetris.draw(false);
+            let y1 = y1 - step;
+            let y2 = y2 - step;
+            let y3 = y3 - step;
+            let y4 = y4 - step;
+            do Tetris.draw(true);
+          }
+        }
+
+        if (input = 132) {
+          let check = Tetris.isAllowed(x1 + step, y1, x2 + step, y2, x3 + step, y3, x4 + step, y4);
+          if (check) {
+            do Tetris.draw(false);
+            let x1 = x1 + step;
+            let x2 = x2 + step;
+            let x3 = x3 + step;
+            let x4 = x4 + step;
+            do Tetris.draw(true);
+          }
+        }
+
+        if (input = 133) {
+          let check = Tetris.isAllowed(x1, y1 + step, x2, y2 + step, x3, y3 + step, x4, y4 + step);
+          if (check) {
+            do Tetris.draw(false);
+            let y1 = y1 + step;
+            let y2 = y2 + step;
+            let y3 = y3 + step;
+            let y4 = y4 + step;
+            do Tetris.draw(true);
+          }
+        }
+
+        if (input = 82) {
+          let centerX = (-x1 - x2)/2;
+          let centerY = (-y1 - y2)/2;
+          let newX1 = -(y1 + centerY + centerX);
+          let newY1 = -(-x1 - centerX + centerY);
+          let newX2 = -(y2 + centerY + centerX);
+          let newY2 = -(-x2 - centerX + centerY);
+
+          if (newX1 < newX2) {
+            if (newY1 < newY2) {
+              let newX3 = newX2 - 20;
+              let newY3 = newY2 - 50;
+              let newX4 = newX2;
+              let newY4 = newY2;
+            } else {
+              let newX3 = newX2 - 50;
+              let newY3 = newY2 + 20;
+              let newX4 = newX2;
+              let newY4 = newY2;
+            }
+          } else {
+            if (newY2 < newY1) {
+              let newX3 = newX2 + 20;
+              let newY3 = newY2 + 50;
+              let newX4 = newX2;
+              let newY4 = newY2;
+            } else {
+              let newX3 = newX2 + 50;
+              let newY3 = newY2 - 20;
+              let newX4 = newX2;
+              let newY4 = newY2;
+            }
+          }
+
+          let check = Tetris.isAllowed(newX1, newY1, newX2, newY2, newX3, newY3, newX4, newY4);
+
+          if (check) {
+            do Tetris.draw(false);
+            let x1 = newX1;
+            let y1 = newY1;
+            
+            let x2 = newX2;
+            let y2 = newY2;
+
+            let x3 = newX3;
+            let y3 = newY3;
+
+            let x4 = newX4;
+            let y4 = newY4;
+            do Tetris.draw(true);
+          }
+        }
+      }
+      return;
+    }
+}

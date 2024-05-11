@@ -1,0 +1,17 @@
+class Main
+{
+    function void main()
+    {
+        do Output.printString("Lorem ipsum, dolor sit amet consectetur adipisicing elit");
+        do Output.moveCursor(0, 0);
+        do Output.printString("Ratione praesentium voluptatibus enim, voluptate at optio maxime sit!");
+        do Output.println();
+        do Output.printInt(1234);
+        do Output.println();
+        do Output.printString("Amet impedit rerum quis fuga.");
+        do Output.moveCursor(0, 3);
+        do Output.printInt(1234);
+        
+        return;
+    }
+}
