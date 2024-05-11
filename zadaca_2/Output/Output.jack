@@ -196,21 +196,17 @@ class Output
         var Array map;
         
         let map = Output.getMap(c);
-        // 16 bitni registri, 32 takvih po retku, zato puta 32
-        // 11 jer svaki karakter ima 11 takvih redaka
-        // cursorX kroz 2 jer isti 16 bitni registar stane 2 karaktera
         let address = (cursorY * 11 * 32) + (cursorX / 2) + 16384;
 
         //print the 11 numbers in charmap
         while (i < 11) {
             let value = Memory.peek(address);
 
-            // cursorX kaze koji karakter u 23x64 mrezi ispisujemo
             if (cursorX & 1 = 0) {
                 let row = map[i];
                 let clean = 255 * 256;
             } else {
-                let row = map[i] * 256; // shift u lijevo za 8 mjesta
+                let row = map[i] * 256;
                 let clean = 255;
             }
             let value = value & clean | row;
@@ -231,7 +227,7 @@ class Output
         return;
     }
 
-    /** displays the given string starting at the cursor location,
+    /** Displays the given string starting at the cursor location,
      *  and advances the cursor appropriately. */
     function void printString(String s)
     {
